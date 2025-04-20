@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Dopamine Tracker</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>🧠 Dopamine Tracker</h1>
+
+  <form method="post">
+    <input type="hidden" name="action" value="add">
+    <input name="habit_name" placeholder="Название привычки" required>
+    <input name="habit_cooldown" type="number" placeholder="Период (дней)" required>
+    <button type="submit">➕ Добавить</button>
+  </form>
+
+  <h2>Мои привычки</h2>
+  <ul>
+    {% for habit in habits %}
+      <li>
+        <strong>{{ habit.name }}</strong><br>
+        Последний раз: {{ habit.last_used or "ещё ни разу" }}<br>
+        {% if habit.available %}
+          ✅ Можно снова!
+        {% else %}
+          ⏳ Осталось {{ habit.days_left }} дней
+        {% endif %}
+        <form method="post" style="display:inline">
+          <input type="hidden" name="action" value="mark_done">
+          <input type="hidden" name="habit_done" value="{{ habit.name }}">
+          <button type="submit">✅ Отметить как сделанное</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
+
